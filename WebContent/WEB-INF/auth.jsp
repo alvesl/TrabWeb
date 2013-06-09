@@ -11,7 +11,7 @@
 <div class="span4">
 	<div class='well'>
 		<h3>Autenticação</h3>
-		<form action="${authBean.action}">
+		<form action="${authBean.action}" method="post">
 			<div class='row-fluid'>
 				<p>${authBean.resource}</p>
 				<input name='login' type="text" />
