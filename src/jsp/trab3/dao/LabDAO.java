@@ -1,16 +1,16 @@
 package jsp.trab3.dao;
 
 import jsp.trab3.HibernateUtil;
+import jsp.trab3.model.LabModel;
 import jsp.trab3.model.UserModel;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-public class UserDAO {
+public class LabDAO {
 
-	public static void insert (UserModel user) {
+public static void insert (LabModel lab) {
 		
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();;
 		Session session = sessionFactory.openSession();;
@@ -18,7 +18,7 @@ public class UserDAO {
 		
 		try {
 			transaction = session.beginTransaction();;
-			session.save(user);
+			session.save(lab);
 			transaction.commit();
 		}
 		catch (Exception e) {
@@ -30,7 +30,7 @@ public class UserDAO {
 		}
 	}
 	
-	public static void remove (UserModel user) {
+	public static void remove (LabModel lab) {
 		
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();;
 		Session session = sessionFactory.openSession();;
@@ -38,7 +38,7 @@ public class UserDAO {
 		
 		try {
 			transaction = session.beginTransaction();;
-			session.delete(user);
+			session.delete(lab);
 			transaction.commit();
 		}
 		catch (Exception e) {
@@ -48,35 +48,6 @@ public class UserDAO {
 			session.flush();
 			session.close();
 		}
-	}
-	
-	public static UserModel get(String username, String password) {
-		
-		UserModel user = null;
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();;
-		Session session = sessionFactory.openSession();;
-		Transaction transaction = null;
-		String queryString = "from UserModel USER where LOGIN = '" + username + "' and PASSWORD = '" + password + "'";
-		Query query;
-		
-		
-		
-		try {
-			transaction = session.beginTransaction();
-			query = session.createQuery(queryString);
-			user = (UserModel)query.uniqueResult();
-			transaction.commit();
-		}
-		catch (Exception e) {
-			if(transaction != null) transaction.rollback();
-		}
-		finally {
-			session.flush();
-			session.close();
-		}
-		
-		
-		return user;
 	}
 	
 }
