@@ -14,8 +14,11 @@
 
 UserModel usr = new UserModel();
 
-usr.setLogin("lucasgostoso");
+usr.setLogin("LucasViado");
 usr.setPassword("carlogay");
+usr.setIsAdmin(false);
+usr.setFullName("CrisChupaRola");
+usr.setEmail("noemail@mail.com");
 
 Test.TestSave(usr);
 
