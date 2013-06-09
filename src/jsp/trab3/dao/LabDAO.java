@@ -58,30 +58,36 @@ public static void insert (LabModel lab) {
 		List<LabModel> list = null;
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();;
 		Session session = sessionFactory.openSession();;
-		Transaction transaction = null;
-		String queryString = "from LabModel LAB";
-		Query query;
-		
-		
+		Query query = session.createQuery("from LabModel LAB");
 		
 		try {
-			transaction = session.beginTransaction();
-			query = session.createQuery(queryString);
 			list = query.list();
-			transaction.commit();
-		}
+		} 
 		catch (Exception e) {
-			if(transaction != null) transaction.rollback();
-		}
-		finally {
-			session.flush();
-			session.close();
+			
 		}
 		
 		
 		return list;
 	}
 	
+	public static LabModel getLab(String labname) {
+
+		LabModel lab = null;
+		
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		Query q = session.createQuery("from LabModel LAB where NAME = '" + labname +"'");
+		
+		
+		try {
 			
+			lab = (LabModel)q.uniqueResult();
+		} catch (Exception e) {
+			
+		}
+		
+		return lab;
+	}
 	
 }
