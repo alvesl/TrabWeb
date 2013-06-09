@@ -1,6 +1,8 @@
 package jsp.trab3;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +28,10 @@ public class User extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		AuthBean authBean = new AuthBean("Usuário", "./User");
+		request.setAttribute("authBean", authBean);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/auth.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	/**
