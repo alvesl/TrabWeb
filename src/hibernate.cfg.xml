@@ -23,6 +23,7 @@
  		
         <!-- Mapping files -->
 		<mapping class="jsp.trab3.model.UserModel"/>
+		<mapping class="jsp.trab3.model.LabModel"/>
 		
 		
     </session-factory>

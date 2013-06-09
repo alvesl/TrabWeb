@@ -20,13 +20,21 @@ usr.setIsAdmin(false);
 usr.setFullName("testebom");
 usr.setEmail("noemail@mail.com");
 
-UserModel user = UserDAO.getUser("teste", "1234");
-UserDAO.remove(user);
+//UserModel user = UserDAO.getUser("teste", "1234");
+//UserDAO.remove(user);
 
+
+LabModel lab = new LabModel();
+
+lab.setName("LabGrad");
+
+//LabDAO.insert(lab);
+
+LabModel l = LabDAO.getList().get(0);
 
 %>
 
-<%=user.getLogin() %>
+<%=l.getName() %>
 
 </body>
 </html>
