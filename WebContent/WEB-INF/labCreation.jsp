@@ -1,17 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Laboratórios</title>
+<link href="./css/bootstrap.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 onload = function() {
     if (!document.getElementsByTagName || !document.createTextNode) return;
     var rows = document.getElementById('my_table').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
     for (i = 0; i < rows.length; i++) {
         rows[i].onclick = function() {
-            alert(this.rowIndex);
+            var hidden = document.getElementById('labSelector');
+            hidden.value = "del" + this.cells[1].innerHTML;
         }
     }
 }
@@ -38,20 +41,18 @@ onload = function() {
 						<tr>
 							<td colspan="2">Lista de Unidades Cadastradas:</td>
 						</tr>
-						<tr>
-							<td><input type="submit" name="option" value="X"/></td><td width="100%">Sala 546</td>
-						</tr>
 						<c:forEach var="lab" 
 						              items="${labs}" 
 						              varStatus="status">
 						<tr>
-							<td><input type="submit" name="option" value="X"/></td><td ><c:out value="${lab.name}"/></td>
+							<td><input type="submit" name="option" value="X"/></td><td width="100%"><c:out value="${lab.name}"/></td>
 						</tr>
 						</c:forEach>						
 					</table>
 			</td>
 		</tr>
 	</table>
+	<input type="hidden" value="del" name="hidden" id="labSelector">
 </form>
 
 </body>

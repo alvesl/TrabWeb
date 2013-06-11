@@ -49,6 +49,9 @@ public class LabCreation extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		
+		// Verificar qual ação foi tomada
+		
 		String act = request.getParameter("option");
 		
 		if (act.equals("Cadastrar")) {
@@ -66,12 +69,28 @@ public class LabCreation extends HttpServlet {
 			
 			
 		}
-		else if (act.startsWith("del")) {
+		else if (act.equals("X")) {
+			String hid = request.getParameter("hidden");
+			
+			String[] split = hid.split("del");
+			
+			LabModel lab = new LabModel();
+			
+			lab = LabDAO.getLab(split[1]);
+	
+			LabDAO.remove(lab);
 			
 		} 
 		else {
 			// Usuário manipulou string 
 		}
+		
+		// Popular lista
+		
+		ArrayList<LabModel> labs = new ArrayList<LabModel>();
+		labs.addAll(LabDAO.getList());
+		
+		request.setAttribute("labs", labs);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/labCreation.jsp");
 		dispatcher.forward(request, response);
