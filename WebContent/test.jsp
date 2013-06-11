@@ -1,5 +1,6 @@
 
-<%@ page language="java" import="javax.persistence.*,jsp.trab3.model.*,jsp.trab3.dao.*" contentType="text/html; charset=ISO-8859-1"
+<%@page import="org.hibernate.mapping.OneToOne"%>
+<%@ page language="java" import="javax.persistence.*, jsp.trab3.model.*,jsp.trab3.dao.*" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -10,31 +11,24 @@
 <body>
 
 <%
+UserModel user = UserDAO.get("LucasViado", "carlogay");
+LabModel lab = LabDAO.getList().get(0);
 
+BookingModel booking = new BookingModel();
+booking.setLab(lab);
+booking.setUser(user);
 
-UserModel usr = new UserModel();
+BookingDAO.insert(booking);
 
-usr.setLogin("teste");
-usr.setPassword("1234");
-usr.setIsAdmin(false);
-usr.setFullName("testebom");
-usr.setEmail("noemail@mail.com");
+//LabModel lab = new LabModel();
 
-//UserModel user = UserDAO.getUser("teste", "1234");
-//UserDAO.remove(user);
-
-
-LabModel lab = new LabModel();
-
-lab.setName("LabGrad");
+//lab.setName("LabGrad");
 
 //LabDAO.insert(lab);
 
-LabModel l = LabDAO.getList().get(0);
+//LabModel l = LabDAO.getList().get(0);
 
 %>
-
-<%=l.getName() %>
 
 </body>
 </html>

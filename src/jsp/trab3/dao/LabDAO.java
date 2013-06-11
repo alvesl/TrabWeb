@@ -13,7 +13,7 @@ import org.hibernate.Transaction;
 
 public class LabDAO {
 
-public static void insert (LabModel lab) {
+	public static void insert (LabModel lab) {
 		
 		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();;
 		Session session = sessionFactory.openSession();;
