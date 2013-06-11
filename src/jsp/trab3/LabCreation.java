@@ -57,7 +57,7 @@ public class LabCreation extends HttpServlet {
 		if (act.equals("Cadastrar")) {
 			String name = request.getParameter("labName");
 			
-			if (!name.equals("")) {
+			if (!name.equals("") && LabDAO.getLab(name) == null) {
 				// Registrar um novo lab
 				LabModel lab = new LabModel();
 				lab.setName(name);
