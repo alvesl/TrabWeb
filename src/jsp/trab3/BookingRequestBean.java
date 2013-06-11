@@ -30,7 +30,7 @@ public class BookingRequestBean {
 		this.dateTime = dateTime;
 	}
 	public String getTable() {
-		table = "<table class='table table-hover'><tr>";
+		table = "<table class='table table-striped'><tr>";
 		table += "<th></th>";
 		for (String wday : wdays) {
 			table += "<th>" + wday + "</th>";
@@ -40,7 +40,7 @@ public class BookingRequestBean {
 		for(int i = 7; i < 23; i++) {
 			table += "<tr><td>" + i + ":00</td>";
 			for (String wday : wdays) {
-				table += "<td>" + "</td>";
+				table += "<td><span id='booking-cell' class='btn' data-booking='" + wday + '-' + i + "'><i class='icon-plus' /></td>";
 			}
 			table += "</tr>";
 		}
