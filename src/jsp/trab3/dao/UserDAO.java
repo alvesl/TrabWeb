@@ -1,5 +1,7 @@
 package jsp.trab3.dao;
 
+import java.util.List;
+
 import jsp.trab3.HibernateUtil;
 import jsp.trab3.model.UserModel;
 
@@ -67,6 +69,27 @@ public class UserDAO {
 		}
 		
 		return user;
+	}
+	
+	public static List<UserModel> getUsers() {
+		
+		List<UserModel> list = null ;
+		
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();;
+		Session session = sessionFactory.openSession();;
+		Query query = session.createQuery("from UserModel USER");
+		
+		try {
+			list = query.list();
+		} 
+		catch (Exception e) {
+			
+		}
+		
+		
+		return list;
+		
+		
 	}
 	
 }

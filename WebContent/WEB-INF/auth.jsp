@@ -18,7 +18,7 @@
 			</div>
 			<div class='row-fluid'>
 				<p>Senha</p>
-				<input name='senha' type='text' />
+				<input name='senha' type="password" />
 			</div>
 			<input type="submit" value='Entra' />
 		</form>

@@ -11,7 +11,7 @@
 <body>
 
 <%
-UserModel user = UserDAO.get("LucasViado", "carlogay");
+UserModel user = UserDAO.getUser("LucasViado");
 LabModel lab = LabDAO.getList().get(0);
 
 BookingModel booking = new BookingModel();

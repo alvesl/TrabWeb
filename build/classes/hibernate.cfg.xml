@@ -24,10 +24,7 @@
         <!-- Mapping files -->
 		<mapping class="jsp.trab3.model.UserModel"/>
 		<mapping class="jsp.trab3.model.LabModel"/>
-<<<<<<< HEAD
 		<mapping class="jsp.trab3.model.BookingModel"/>
-=======
->>>>>>> 27fc1fd53a7edddf30e20be3a61cc61f3a6d39ab
 		
 		
     </session-factory>

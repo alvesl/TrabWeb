@@ -4,7 +4,6 @@ import java.util.List;
 
 import jsp.trab3.HibernateUtil;
 import jsp.trab3.model.LabModel;
-import jsp.trab3.model.UserModel;
 
 import org.hibernate.Query;
 import org.hibernate.Session;

@@ -57,7 +57,7 @@ public class Admin extends HttpServlet {
 		usr = UserDAO.getUser(login);
 		RequestDispatcher dispatcher;
 		if (usr != null) {
-			if (usr.getPassword().equals(pass)) {
+			if (usr.getPassword().equals(pass) && usr.getIsAdmin()) {
 				//Auth ok
 				 dispatcher = request.getRequestDispatcher("/WEB-INF/adminMenu.html");
 			
