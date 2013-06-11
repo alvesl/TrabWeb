@@ -1,6 +1,8 @@
 package jsp.trab3;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,19 +10,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class User
+ * Servlet implementation class BookingRequest
  */
-@WebServlet("/User")
-public class User extends HttpServlet {
+@WebServlet("/BookingRequest")
+public class BookingRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public User() {
+    public BookingRequest() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -29,9 +30,18 @@ public class User extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AuthBean authBean = new AuthBean("Usuário", "./User");
-		request.setAttribute("authBean", authBean);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/auth.jsp");
+		BookingRequestBean brb = new BookingRequestBean();
+		brb.setUserName((String) request.getSession().getAttribute("user"));
+		String dateString = request.getParameter("date");
+		if (dateString != null) {
+			brb.setDateTime(dateString);
+		} else {
+			Date today = new Date();
+			SimpleDateFormat ft = new SimpleDateFormat ("dd-MM-yyyy");
+			brb.setDateTime(ft.format(today));
+		}
+		request.setAttribute("bookingRequestBean", brb);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/bookingRequest.jsp");
 		dispatcher.forward(request, response);
 	}
 
@@ -39,11 +49,7 @@ public class User extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String user = request.getParameter("user");
-		String password = request.getParameter("password");
-		HttpSession session = request.getSession();
-		session.setAttribute("user", user);
-		response.sendRedirect("./BookingRequest");
+		// TODO Auto-generated method stub
 	}
 
 }
