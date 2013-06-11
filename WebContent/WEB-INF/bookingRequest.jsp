@@ -52,7 +52,9 @@
 		</form>
 	</div>
 <div class="row-fluid">
-	${bookingRequestBean.table}
+	<div class="span8 offset2">
+		${bookingRequestBean.table}
+	</div>
 </div>
 </body>
 </html>

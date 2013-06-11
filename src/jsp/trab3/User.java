@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import jsp.trab3.dao.UserDAO;
+import jsp.trab3.model.UserModel;
+
 /**
  * Servlet implementation class User
  */
@@ -39,11 +42,30 @@ public class User extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String user = request.getParameter("user");
-		String password = request.getParameter("password");
-		HttpSession session = request.getSession();
-		session.setAttribute("user", user);
-		response.sendRedirect("./BookingRequest");
+		String login =  request.getParameter("login");
+		String pass = request.getParameter("senha");
+		// Realizar login
+		UserModel usr ;
+		usr = UserDAO.getUser(login);
+		RequestDispatcher dispatcher;
+		if (usr != null) {
+			if (usr.getPassword().equals(pass) && !usr.getIsAdmin()) {
+				//Auth ok
+				 response.sendRedirect("./BookingRequest");
+				 return;
+			}
+			
+			else {
+				dispatcher = request.getRequestDispatcher("/WEB-INF/auth.jsp");
+				
+			}
+		} 
+		else {
+			dispatcher = request.getRequestDispatcher("/WEB-INF/auth.jsp");
+		}
+
+		
+		dispatcher.forward(request, response);
 	}
 
 }

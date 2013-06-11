@@ -14,7 +14,7 @@
 		<form action="${authBean.action}" method="post">
 			<div class='row-fluid'>
 				<p>${authBean.resource}</p>
-				<input name='user' type="text" />
+				<input name='login' type="text" />
 			</div>
 			<div class='row-fluid'>
 				<p>Senha</p>
