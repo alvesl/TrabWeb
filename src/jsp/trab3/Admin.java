@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import jsp.trab3.dao.UserDAO;
+import jsp.trab3.model.UserModel;
+
 /**
  * Servlet implementation class Admin
  */
@@ -46,7 +49,31 @@ public class Admin extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
+		String login =  request.getParameter("login");
+		String pass = request.getParameter("senha");
+		// Realizar login
+		UserModel usr ;
+		usr = UserDAO.getUser(login);
+		RequestDispatcher dispatcher;
+		if (usr != null) {
+			if (usr.getPassword().equals(pass)) {
+				//Auth ok
+				 dispatcher = request.getRequestDispatcher("/WEB-INF/adminMenu.html");
+			
+			}
+			
+			else {
+				dispatcher = request.getRequestDispatcher("/WEB-INF/auth.jsp");
+				
+			}
+		} 
+		else {
+			dispatcher = request.getRequestDispatcher("/WEB-INF/auth.jsp");
+		}
+
+		
+		dispatcher.forward(request, response);
 	}
 
 }

@@ -49,32 +49,22 @@ public class UserDAO {
 			session.close();
 		}
 	}
-	
-	public static UserModel get(String username, String password) {
-		
+
+	public static UserModel getUser(String username) {
+
 		UserModel user = null;
-		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();;
-		Session session = sessionFactory.openSession();;
-		Transaction transaction = null;
-		String queryString = "from UserModel USER where LOGIN = '" + username + "' and PASSWORD = '" + password + "'";
-		Query query;
 		
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		Query q = session.createQuery("from UserModel USER where LOGIN = '" + username +"'");
 		
 		
 		try {
-			transaction = session.beginTransaction();
-			query = session.createQuery(queryString);
-			user = (UserModel)query.uniqueResult();
-			transaction.commit();
+			
+			user = (UserModel)q.uniqueResult();
+		} catch (Exception e) {
+			
 		}
-		catch (Exception e) {
-			if(transaction != null) transaction.rollback();
-		}
-		finally {
-			session.flush();
-			session.close();
-		}
-		
 		
 		return user;
 	}
