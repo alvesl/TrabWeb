@@ -25,6 +25,7 @@
 		<mapping class="jsp.trab3.model.UserModel"/>
 		<mapping class="jsp.trab3.model.LabModel"/>
 		<mapping class="jsp.trab3.model.BookingModel"/>
+		<mapping class="jsp.trab3.model.DateTimeModel"/>
 		
 		
     </session-factory>
