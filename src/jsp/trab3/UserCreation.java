@@ -80,6 +80,7 @@ public class UserCreation extends HttpServlet {
 						usr.setIsAdmin(adm);
 						
 						UserDAO.insert(usr);
+						
 					}				
 				}
 			}
