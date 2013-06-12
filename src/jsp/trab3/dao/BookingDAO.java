@@ -114,4 +114,22 @@ public class BookingDAO {
 		return list;
 	}
 	
+	public static BookingModel getBooking(String id) {
+
+		BookingModel booking = null;
+				
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		Query q = session.createQuery("from BookingModel b where b.id = '" + id +"'");
+
+		try {	
+			booking = (BookingModel)q.uniqueResult();
+		} 
+		catch (Exception e) {
+			System.out.print(e.getMessage());
+		}
+		
+		return booking;
+	}
+	
 }
