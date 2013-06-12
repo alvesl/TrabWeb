@@ -12,6 +12,8 @@
 <script type="text/javascript" src="./js/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+	var bookId;
+	
 	$('#datepicker').datepicker().on('changeDate', function(e) {
 	    clickedDate = new Date(e.date.toString());
 	    day = clickedDate.getUTCDate();
@@ -23,10 +25,25 @@ $(document).ready(function(){
 	    window.location.href = "http://" + window.location.host + window.location.pathname + '?' + params;
 	});
 
-	$('span#booking-cell').hover(function() {
-		$(this).toggleClass('btn-success');
-	});
 	
+	$('#defereAct').click(function() {
+		
+		$('#labHidden').val($('#selectLab').find(":selected").text());
+		$('form').append("<input type='hidden' name='bookEmpty' value='true'/>");
+		$('form').append("<input type='hidden' name='bookID' value='go'/>");
+		$('form').append("<input type='hidden' name='acao' value='Defere'/>");
+		$('form').submit();
+		
+	});
+
+	$('#indefereAct').click(function() {
+		$('#labHidden').val($('#selectLab').find(":selected").text());
+		$('form').append("<input type='hidden' name='bookEmpty' value='true'/>");
+		$('form').append("<input type='hidden' name='bookID' value='go'/>");
+		$('form').append("<input type='hidden' name='acao' value='Indefere'/>");
+		$('form').submit();
+	});	
+		
 	$('span#booking-cell').click(function() {
 		clickedDate = new Date($('#datepicker').data('datepicker').getDate());
 	    day = clickedDate.getUTCDate();
@@ -36,6 +53,8 @@ $(document).ready(function(){
 		$('form').append("<input type='hidden' name='bookID' value='" + $(this).data('bookingid') + "'/>");
 		$('form').append("<input type='hidden' name='datePost' value='"+ day + '-' + month + '-' + year+ '/' + week + '/' + $('#selectLab').find(":selected").text()+"'/>");
 		$('#labHidden').val($('#selectLab').find(":selected").text());
+		$('#var').val($(this).data('bookingid'));
+		
 		$('form').submit();
 	});
 	
@@ -116,15 +135,15 @@ $(document).ready(function(){
 					<tr>
 						<td colspan="2">
 							Motivo ou observações:
-							<textarea rows="7" cols="30"></textarea>
+							<textarea name="obs" rows="7" cols="30"></textarea>
 						</td>
 					</tr>
 					<tr>
 						<td align="center">
-								<input type="submit" class="btn btn-danger" value="Indefere" />
+								<input type="button" id="indefereAct"  name="acao" class="btn" value="Indefere" />
 						</td>
 						<td align="center">
-								<input type="submit" class="btn btn-success" value="Defere" />
+								<input type="button" id="defereAct" name="acao" class="btn" value="Defere" />
 						</td>
 					</tr>
 				</table>				
@@ -135,7 +154,8 @@ $(document).ready(function(){
 
 </div>
 	
-
+<input type="hidden" id="var" />
 </form>
+
 </body>
 </html>

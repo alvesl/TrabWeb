@@ -1,7 +1,6 @@
 package jsp.trab3;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,9 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import jsp.trab3.dao.BookingDAO;
 import jsp.trab3.dao.LabDAO;
+import jsp.trab3.dao.UserDAO;
 import jsp.trab3.model.BookingModel;
 import jsp.trab3.model.DateTimeModel;
 import jsp.trab3.model.LabModel;
+import jsp.trab3.model.UserModel;
 
 /**
  * Servlet implementation class AdminHomologRequest
@@ -27,6 +28,8 @@ import jsp.trab3.model.LabModel;
 @WebServlet("/AdminHomologRequest")
 public class AdminHomologRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private String lastClickedBook;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -34,6 +37,7 @@ public class AdminHomologRequest extends HttpServlet {
     public AdminHomologRequest() {
         super();
         // TODO Auto-generated constructor stub
+        lastClickedBook = null;
     }
 
 	/**
@@ -117,8 +121,8 @@ public class AdminHomologRequest extends HttpServlet {
 					String[] split = time.split(":");
 					if (split[0].charAt(0) == '0')
 						split[0] = split[0].substring(1);					
-						
-					table = table.replaceFirst("data-booking='"+wdays[i]+ '-' +split[0]+ "'>", "data-bookingid='"+ Integer.toString(book.getId()) + "' data-booking='"+wdays[i]+ '-' +split[0]+ "'>" + book.getUser().getLogin() );
+					String color = book.isHomolog() ?  "btn-danger" : "btn-success" ; 	
+					table = table.replaceFirst("data-booking='"+wdays[i]+ '-' +split[0]+ "'>", "class='" + color + "'" +   " data-bookingid='"+ Integer.toString(book.getId()) + "' data-booking='"+wdays[i]+ '-' +split[0]+ "'>" + book.getUser().getLogin() );
 					
 				}				
 			}
@@ -158,6 +162,75 @@ public class AdminHomologRequest extends HttpServlet {
 
 		int soma = 0;
 		
+		BookingModel bm = new BookingModel();
+
+		
+		if (request.getParameter("bookID") != null) {
+			
+			String bId = request.getParameter("bookID");
+			
+			if (request.getParameter("bookEmpty") != null)
+				bId = lastClickedBook;
+			else
+				lastClickedBook = request.getParameter("bookID"); 
+			
+			 bm = BookingDAO.getBooking(bId);
+			 
+			
+			ArrayList<SelectedBookingBean> selected = new ArrayList<SelectedBookingBean>();
+			lastClickedBook = request.getParameter("bookID"); 
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			
+			for (DateTimeModel dtm : bm.getDateTimes()) {
+				SelectedBookingBean sbb = new SelectedBookingBean();
+				sbb.setTime(dtm.getTime().toString());
+				sbb.setDate(sdf.format(dtm.getDate()));
+				selected.add(sbb);
+			}
+			 
+			
+			request.setAttribute("selectedBookingBean", selected);
+			request.setAttribute("selectedBooking", bm);
+		}
+		
+		//Deferir ou indeferir
+		String acao = request.getParameter("acao");
+		if (acao != null ) {
+			if (acao.equals("Defere")) {
+				if (bm != null) {
+					// houve clique
+					//Verificar se o cara já foi homologado
+					if (bm.isHomolog()) {
+						BookingDAO.homolog(bm.getId(), true, request.getParameter("obs"));
+					//E-mail
+						UserModel usr ;
+						usr = bm.getUser();
+						bm = BookingDAO.getBooking(Integer.toString(bm.getId()));
+						Mail.sendMail(usr.getEmail(), "Pedido de sala", "Seu pedido para a sala "+ bm.getLab().getName()+ " foi DEFERIDO! \n Motivo: "+bm.getDeferedObs(), "Pedidos@Sala.com");
+						
+						
+					}
+				}
+			} else {
+				if (bm != null) {
+					if (bm.isHomolog()) {
+						BookingDAO.homolog(bm.getId(), false, request.getParameter("obs"));
+						
+						// Email
+						UserModel usr ;
+						usr = bm.getUser();
+						bm = BookingDAO.getBooking(Integer.toString(bm.getId()));
+						Mail.sendMail(usr.getEmail(), "Pedido de sala", "Seu pedido para a sala "+ bm.getLab().getName()+ " foi INDEFERIDO! \n Motivo: " +bm.getDeferedObs(), "Pedidos@Sala.com");
+					}
+					
+				}
+				
+				
+			}
+			
+		}
+		
+		
 		AdminHomologBean brb = new AdminHomologBean();
 		String dateStr = request.getParameter("datePost");
 		Calendar c = Calendar.getInstance();
@@ -178,7 +251,7 @@ public class AdminHomologRequest extends HttpServlet {
 		
 	    brb.setDateTime(date[0]);
 	    
-	    System.out.println(date[0]);
+	    
 	    
 		// Fazer requisição de horários
 		String l = request.getParameter("labName");
@@ -224,8 +297,8 @@ public class AdminHomologRequest extends HttpServlet {
 					String[] split = time.split(":");
 					if (split[0].charAt(0) == '0')
 						split[0] = split[0].substring(1);					
-						
-					table = table.replaceFirst("data-booking='"+wdays[i]+ '-' +split[0]+ "'>", "data-bookingid='"+ Integer.toString(book.getId()) + "' data-booking='"+wdays[i]+ '-' +split[0]+ "'>" + book.getUser().getLogin() );
+					String color = book.isHomolog() ?   "btn-danger" : "btn-success"  ; 
+					table = table.replaceFirst("data-booking='"+wdays[i]+ '-' +split[0]+ "'>", "class='" + color + "'" +  " data-bookingid='"+ Integer.toString(book.getId()) + "' data-booking='"+wdays[i]+ '-' +split[0]+ "'>" + book.getUser().getLogin() );
 					
 				}				
 			}
@@ -235,30 +308,13 @@ public class AdminHomologRequest extends HttpServlet {
 		brb.setTable(table);
 		request.setAttribute("adminHomologBean", brb);
 		
-		
-		if (request.getParameter("bookID") != null) {
-			
-			BookingModel bm = BookingDAO.getBooking(request.getParameter("bookID"));
-			
-			ArrayList<SelectedBookingBean> selected = new ArrayList<SelectedBookingBean>();
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-			
-			for (DateTimeModel dtm : bm.getDateTimes()) {
-				SelectedBookingBean sbb = new SelectedBookingBean();
-				sbb.setTime(dtm.getTime().toString());
-				sbb.setDate(sdf.format(dtm.getDate()));
-				selected.add(sbb);
-			}
-			 
-			
-			request.setAttribute("selectedBookingBean", selected);
-			request.setAttribute("selectedBooking", bm);
-		}
+
 		
 		ArrayList<LabModel> labList = new ArrayList<LabModel>();
 		labList.addAll(LabDAO.getList());
 		LabModel auxlab = null;
+		if (lab.getName().endsWith(" "))
+			lab.setName(lab.getName().substring(0, lab.getName().length()-1));
 		for (LabModel labM : labList) {
 			if (labM.getName().equals(lab.getName()))
 				auxlab = (labM);
@@ -269,6 +325,11 @@ public class AdminHomologRequest extends HttpServlet {
 		request.setAttribute("labs", labList);
 		
 		request.setAttribute("adminHomologBean", brb);
+		
+
+		
+		
+		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/adminHomologRequest.jsp");
 		dispatcher.forward(request, response);
 		

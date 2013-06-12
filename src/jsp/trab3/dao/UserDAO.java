@@ -71,6 +71,25 @@ public class UserDAO {
 		return user;
 	}
 	
+	public static UserModel getUserById(int id) {
+
+		UserModel user = null;
+		
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		Query q = session.createQuery("from UserModel USER where id = " + id);
+		
+		
+		try {
+			
+			user = (UserModel)q.uniqueResult();
+		} catch (Exception e) {
+			
+		}
+		
+		return user;
+	}
+	
 	public static List<UserModel> getUsers() {
 		
 		List<UserModel> list = null ;

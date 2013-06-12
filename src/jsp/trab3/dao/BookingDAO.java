@@ -128,8 +128,41 @@ public class BookingDAO {
 		catch (Exception e) {
 			System.out.print(e.getMessage());
 		}
+		finally {
+			session.flush();
+			session.close();
+		}
 		
 		return booking;
+	}
+	
+	public static void homolog (int bookingId, boolean isDef, String msg) {
+		
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+
+		
+		//Query q = session.createQuery("updade BookingModel b set b.isHomolog = 0, b.isDefered = " + shouldDef +", b.deferedObs = "+ msg + " where b.id = " + bookingId +"");
+		
+		try {
+			transaction = session.beginTransaction();
+			BookingModel booking = getBooking(Integer.toString(bookingId));
+			booking.setHomolog(false);
+			booking.setDefered(isDef);
+			booking.setDeferedObs(msg);
+			session.update(booking);
+			//q.executeUpdate();
+			transaction.commit();
+		}
+		catch (Exception e) {
+			System.out.println(e.getMessage());
+			if(transaction != null) transaction.rollback();
+		}
+		finally {
+			session.flush();
+			session.close();
+		}
 	}
 	
 }

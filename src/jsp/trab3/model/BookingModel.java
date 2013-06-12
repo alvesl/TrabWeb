@@ -45,6 +45,12 @@ public class BookingModel {
 	
 	@Column(name = "ISHOMOLOG")
 	private boolean isHomolog;
+
+	@Column(name = "ISDEFERED")
+	private boolean isDefered;
+	
+	@Column(name = "DEFEREDOBS")
+	private String deferedObs;	
 	
 	@OneToMany(cascade=CascadeType.ALL,
 	fetch=FetchType.EAGER)
@@ -121,6 +127,22 @@ public class BookingModel {
 
 	public void setHomolog(boolean isHomolog) {
 		this.isHomolog = isHomolog;
+	}
+
+	public boolean isDefered() {
+		return isDefered;
+	}
+
+	public void setDefered(boolean isDefered) {
+		this.isDefered = isDefered;
+	}
+
+	public String getDeferedObs() {
+		return deferedObs;
+	}
+
+	public void setDeferedObs(String deferedObs) {
+		this.deferedObs = deferedObs;
 	}
 	
 }
