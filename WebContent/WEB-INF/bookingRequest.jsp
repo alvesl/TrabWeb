@@ -14,11 +14,11 @@
 <body>
 <h1>Pedido de Reserva</h1>
 <h3>Usuário: ${bookingRequestBean.userName}</h3>
-<div class="row-fluid">
+<div class="row">
 	<div class="span3">
 		<div id="datepicker" data-date="${bookingRequestBean.dateTime}" data-date-format="dd-mm-yyyy"></div>
 	</div>
-	<div class="span5">
+	<div class="span6">
 		<form action="./BookingRequest" class="form-horizontal">
 			<div class="control-group">
 				<label class="control-label" for="responsavel">Responsável</label>
@@ -51,8 +51,11 @@
 			</div>
 		</form>
 	</div>
-	<div class='span4' id='booking_list'></div>
-<div class="row-fluid">
+	<div class='span3' id='booking-list'>
+		<button id='erase-reservation' class='btn btn-danger'>Apagar pedidos</button>
+	</div>
+</div>
+<div class="row">
 	<div class="span8 offset2">
 		${bookingRequestBean.table}
 	</div>

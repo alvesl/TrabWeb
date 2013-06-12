@@ -14,6 +14,11 @@ $(document).ready(function(){
 	});
 	
 	$('span#booking-cell').click(function(){
-		$('form').append("<input type='hidden' value='" + $(this).data('booking') + "'/>");
+		$('form').append("<input class='new-booking-time' type='hidden' value='" + $(this).data('booking') + "'/>");
+		$('#booking-list').append("<p class='new-booking-time'>" + $(this).data('booking') + 'horas' + "</p>");
+	});
+	
+	$('#erase-reservation').click(function(){
+		$('.new-booking-time').remove();
 	});
 });
