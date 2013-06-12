@@ -25,10 +25,7 @@
 		<mapping class="jsp.trab3.model.UserModel"/>
 		<mapping class="jsp.trab3.model.LabModel"/>
 		<mapping class="jsp.trab3.model.BookingModel"/>
-<<<<<<< Updated upstream
-=======
 		<mapping class="jsp.trab3.model.DateTimeModel"/>
->>>>>>> Stashed changes
 		
 		
     </session-factory>
