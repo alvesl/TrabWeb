@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import jsp.trab3.dao.BookingDAO;
+import jsp.trab3.dao.LabDAO;
 import jsp.trab3.model.BookingModel;
 import jsp.trab3.model.DateTimeModel;
 import jsp.trab3.model.LabModel;
@@ -39,6 +40,7 @@ public class AdminHomologRequest extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int soma = 0;
 		AdminHomologBean brb = new AdminHomologBean();
 		brb.setUserName((String) request.getSession().getAttribute("user"));
 		String dateString = request.getParameter("date");
@@ -49,7 +51,7 @@ public class AdminHomologRequest extends HttpServlet {
 			SimpleDateFormat ft = new SimpleDateFormat ("dd-MM-yyyy");
 			brb.setDateTime(ft.format(today));
 		}
-		request.setAttribute("adminHomologBean", brb);
+		
 		Calendar c = Calendar.getInstance();
 		String dateStr = request.getParameter("date");
 		String[] date = null;
@@ -58,13 +60,24 @@ public class AdminHomologRequest extends HttpServlet {
 			Date today = new Date();
 			SimpleDateFormat ftA = new SimpleDateFormat ("dd-MM-yyyy");
 			dateStr = (ftA.format(today)) + "/" + c.get(Calendar.DAY_OF_WEEK);
-			
+			soma = 1;
 		}
 	    date = dateStr.split("/");
-		
+	    
+	  
+	    brb.setDateTime(date[0]);
 		// Fazer requisição de horários
-		LabModel lab = new LabModel();
-		lab.setName("LabGrad");
+	    LabModel lab = null;
+	    if (date.length <= 2) {
+	    	lab = LabDAO.getList().get(0);
+			if (lab == null)
+				lab.setName("");
+	    } else {
+	    	lab = new LabModel();
+	    	lab.setName(date[2]);
+	    }
+		
+
 		
 		SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
@@ -75,7 +88,7 @@ public class AdminHomologRequest extends HttpServlet {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		c.add(Calendar.DATE, - Integer.parseInt(date[1])+1);  // number of days to add
+		c.add(Calendar.DATE, - Integer.parseInt(date[1])+soma);  // number of days to add
 		String startWeek = sdf2.format(c.getTime());
 
 		ArrayList<ArrayList<BookingModel>> bookList = BookingDAO.getWeek(lab, startWeek);
@@ -113,6 +126,21 @@ public class AdminHomologRequest extends HttpServlet {
 		}
 		
 		brb.setTable(table);
+
+		request.setAttribute("adminHomologBean", brb);
+
+		
+		ArrayList<LabModel> labList = new ArrayList<LabModel>();
+		labList.addAll(LabDAO.getList());
+		LabModel auxlab = null;
+		for (LabModel labM : labList) {
+			if (labM.getName().equals(lab.getName()))
+				auxlab = (labM);
+		}
+		labList.remove(auxlab);
+		labList.add(0, lab);
+		
+		request.setAttribute("labs", labList);
 		request.setAttribute("adminHomologBean", brb);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/adminHomologRequest.jsp");
@@ -128,34 +156,35 @@ public class AdminHomologRequest extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		
+		int soma = 0;
 		
 		AdminHomologBean brb = new AdminHomologBean();
-		brb.setUserName((String) request.getSession().getAttribute("user"));
-		String dateString = request.getParameter("date");
-		if (dateString != null) {
-			brb.setDateTime(dateString);
-		} else {
-			Date today = new Date();
-			SimpleDateFormat ft = new SimpleDateFormat ("dd-MM-yyyy");
-			brb.setDateTime(ft.format(today));
-		}
-		request.setAttribute("adminHomologBean", brb);
+		String dateStr = request.getParameter("datePost");
 		Calendar c = Calendar.getInstance();
-		String dateStr = request.getParameter("date");
-		String[] date = null;
-		if (dateStr == null)
-		{
+		
+		if (dateStr == null) {
+			
 			Date today = new Date();
 			SimpleDateFormat ftA = new SimpleDateFormat ("dd-MM-yyyy");
 			dateStr = (ftA.format(today)) + "/" + c.get(Calendar.DAY_OF_WEEK);
-			
+			soma = 1;
 		}
+		
+		
+		
+		String[] date = null;
+
 	    date = dateStr.split("/");
 		
+	    brb.setDateTime(date[0]);
+	    
+	    System.out.println(date[0]);
+	    
 		// Fazer requisição de horários
-		LabModel lab = new LabModel();
-		lab.setName("LabGrad");
+		String l = request.getParameter("labName");
+	    
+	    LabModel lab = new LabModel();
+		lab.setName(l);
 		
 		SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
@@ -166,7 +195,7 @@ public class AdminHomologRequest extends HttpServlet {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		c.add(Calendar.DATE, - Integer.parseInt(date[1])+1);  // number of days to add
+		c.add(Calendar.DATE, - Integer.parseInt(date[1])+soma);  // number of days to add
 		String startWeek = sdf2.format(c.getTime());
 
 		ArrayList<ArrayList<BookingModel>> bookList = BookingDAO.getWeek(lab, startWeek);
@@ -207,8 +236,39 @@ public class AdminHomologRequest extends HttpServlet {
 		request.setAttribute("adminHomologBean", brb);
 		
 		
-		System.out.println(request.getParameter("bookID"));
+		if (request.getParameter("bookID") != null) {
+			
+			BookingModel bm = BookingDAO.getBooking(request.getParameter("bookID"));
+			
+			ArrayList<SelectedBookingBean> selected = new ArrayList<SelectedBookingBean>();
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			
+			for (DateTimeModel dtm : bm.getDateTimes()) {
+				SelectedBookingBean sbb = new SelectedBookingBean();
+				sbb.setTime(dtm.getTime().toString());
+				sbb.setDate(sdf.format(dtm.getDate()));
+				selected.add(sbb);
+			}
+			 
+			
+			request.setAttribute("selectedBookingBean", selected);
+			request.setAttribute("selectedBooking", bm);
+		}
 		
+		ArrayList<LabModel> labList = new ArrayList<LabModel>();
+		labList.addAll(LabDAO.getList());
+		LabModel auxlab = null;
+		for (LabModel labM : labList) {
+			if (labM.getName().equals(lab.getName()))
+				auxlab = (labM);
+		}
+		labList.remove(auxlab);
+		labList.add(0, lab);
+		
+		request.setAttribute("labs", labList);
+		
+		request.setAttribute("adminHomologBean", brb);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/adminHomologRequest.jsp");
 		dispatcher.forward(request, response);
 		

@@ -31,6 +31,21 @@ public class BookingModel {
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	private LabModel lab;
 
+	@Column(name = "RESPONSAVEL")
+	private String responsavel;
+	
+	@Column(name = "MOTIVO")
+	private String motivo;
+	
+	@Column(name = "PROJETO")
+	private String projeto;
+	
+	@Column(name = "DESCRICAO")
+	private String descricao;
+	
+	@Column(name = "ISHOMOLOG")
+	private boolean isHomolog;
+	
 	@OneToMany(cascade=CascadeType.ALL,
 	fetch=FetchType.EAGER)
 	@JoinColumn(name="booking_ID")
@@ -66,6 +81,46 @@ public class BookingModel {
 
 	public void setDateTimes(List<DateTimeModel> dateTimes) {
 		this.dateTimes = dateTimes;
+	}
+
+	public String getResponsavel() {
+		return responsavel;
+	}
+
+	public void setResponsavel(String responsavel) {
+		this.responsavel = responsavel;
+	}
+
+	public String getMotivo() {
+		return motivo;
+	}
+
+	public void setMotivo(String motivo) {
+		this.motivo = motivo;
+	}
+
+	public String getProjeto() {
+		return projeto;
+	}
+
+	public void setProjeto(String projeto) {
+		this.projeto = projeto;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public boolean isHomolog() {
+		return isHomolog;
+	}
+
+	public void setHomolog(boolean isHomolog) {
+		this.isHomolog = isHomolog;
 	}
 	
 }
