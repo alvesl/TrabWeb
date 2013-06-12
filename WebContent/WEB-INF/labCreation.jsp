@@ -23,7 +23,7 @@ onload = function() {
 <body>
 <h1>Cadastro de Unidades</h1>
 <p>
-<a href="menu.html">Início</a> | <a href="..">Logout</a>
+<a href="/trab3/">Logout</a>
 </p>
 <form action="./LabCreation" method="post">
 	<table>

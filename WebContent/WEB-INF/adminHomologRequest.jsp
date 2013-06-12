@@ -68,6 +68,7 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
+<a href="/trab3/">Logout</a>
 <h1>Homologação</h1>
 <h3>Sala:</h3>
 <form action="./AdminHomologRequest" class="form-horizontal" method="post">

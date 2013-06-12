@@ -31,7 +31,7 @@ function getIsAdmin() {
 <body>
 <h1>Cadastro de Usuário</h1>
 <p>
-<a href="menu.html">Início</a> | <a href="..">Logout</a>
+<a href="/trab3/">Logout</a>
 </p>
 <form action="./UserCreation" method="post">
 	<table>

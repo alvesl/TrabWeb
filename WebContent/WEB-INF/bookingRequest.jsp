@@ -13,6 +13,7 @@
 <script type="text/javascript" src="./js/trab3.js"></script>
 </head>
 <body>
+<a href="/trab3/">Logout</a>
 <h1>Pedido de Reserva</h1>
 <h3>Usuário: ${bookingRequestBean.userName}</h3>
 
