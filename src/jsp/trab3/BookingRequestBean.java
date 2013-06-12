@@ -8,13 +8,13 @@ public class BookingRequestBean {
 	
 	public BookingRequestBean() {
 		wdays = new String[7];
-		wdays[0] = "segunda";
-		wdays[1] = "terça";
-		wdays[2] = "quarta";
-		wdays[3] = "quinta";
-		wdays[4] = "sexta";
-		wdays[5] = "sábado";
-		wdays[6] = "domingo";
+		wdays[1] = "segunda";
+		wdays[2] = "terça";
+		wdays[3] = "quarta";
+		wdays[4] = "quinta";
+		wdays[5] = "sexta";
+		wdays[6] = "sábado";
+		wdays[0] = "domingo";
 	}
 	
 	public String getUserName() {
