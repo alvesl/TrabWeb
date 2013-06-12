@@ -59,6 +59,28 @@ public class BookingDAO {
 		}
 	}
 	
+	public static ArrayList<ArrayList<BookingModel>> getWeekByUser(LabModel lab, String date, int userId) {
+		ArrayList<ArrayList<BookingModel>> list = new ArrayList<ArrayList<BookingModel>>();
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = Calendar.getInstance();
+		
+		try {
+			for(int i = 0 ; i <= 6 ; i++)
+			{
+				list.add(getByUser(lab, date, userId));
+				c.setTime(sdf.parse(date));
+				c.add(Calendar.DATE, 1);  // number of days to add
+				date = sdf.format(c.getTime());
+			}
+		}
+		catch (Exception e) {
+			System.out.print(e.getMessage());
+		}
+		
+		return list;
+	}
+	
 	public static ArrayList<ArrayList<BookingModel>> getWeek(LabModel lab, String date) {
 		ArrayList<ArrayList<BookingModel>> list = new ArrayList<ArrayList<BookingModel>>();
 
@@ -76,6 +98,39 @@ public class BookingDAO {
 		}
 		catch (Exception e) {
 			System.out.print(e.getMessage());
+		}
+		
+		return list;
+	}
+	
+	public static ArrayList<BookingModel> getByUser(LabModel lab, String date, int userId) {
+
+		ArrayList<BookingModel> list = new ArrayList<BookingModel>();
+				
+		SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+		Session session = sessionFactory.openSession();
+		Query q = session.createQuery("from BookingModel b join b.dateTimes d where b.user.id = " + Integer.toString(userId) + " and b.lab.name = '" + lab.getName() +"' and d.date = '" + date + "' order by b.id, d.date");
+		
+		List<Object> l = null;
+		try {	
+			l = q.list();
+		} 
+		catch (Exception e) {
+			System.out.print(e.getMessage());
+		}
+		
+		for(int i = 0 ; i < l.size(); i++)
+		
+		{
+			BookingModel b = (BookingModel)((Object[])l.get(i))[0];
+			
+			if((list.size() == 0) || (list.get(list.size() - 1).getId() != b.getId()))
+			{
+				list.add(b);
+				b.setDateTimes(new ArrayList<DateTimeModel>());
+			}
+			
+			list.get(list.size() - 1).getDateTimes().add((DateTimeModel)((Object[])l.get(i))[1]);
 		}
 		
 		return list;

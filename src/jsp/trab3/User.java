@@ -50,7 +50,8 @@ public class User extends HttpServlet {
 		RequestDispatcher dispatcher;
 		if (usr != null) {
 			if (usr.getPassword().equals(pass) && !usr.getIsAdmin()) {
-				//Auth ok
+				 request.getSession().setAttribute("user", usr.getFullName());
+				 request.getSession().setAttribute("userId", Integer.toString(usr.getId()));
 				 response.sendRedirect("./BookingRequest");
 				 return;
 			}

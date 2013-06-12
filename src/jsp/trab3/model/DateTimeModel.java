@@ -21,13 +21,13 @@ public class DateTimeModel {
 	private int id;
 
 	@Column(name = "DATE")
-	private Timestamp date;
+	private Date date;
 
-	public Timestamp getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(Timestamp date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 		
